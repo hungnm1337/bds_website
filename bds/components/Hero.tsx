@@ -84,7 +84,7 @@ export default function Hero({ agent }: HeroProps) {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-lg border border-gray-100 hidden lg:block"
           >
-            <p className="text-[#0F4C81] font-bold text-2xl">10+ Năm</p>
+            <p className="text-[#0F4C81] font-bold text-2xl">8+ Năm</p>
             <p className="text-gray-500 text-sm">Kinh nghiệm thực chiến</p>
           </motion.div>
         </div>

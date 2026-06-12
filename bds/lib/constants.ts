@@ -1,18 +1,18 @@
 export const portfolioData = {
   agent: {
-    name: "NGUYỄN VĂN A",
+    name: "NGUYỄN VĂN ĐÔ",
     title: "Chuyên Viên Tư Vấn Bất Động Sản Cao Cấp",
-    bio: "Với hơn 10 năm kinh nghiệm trong lĩnh vực bất động sản cao cấp, tôi cam kết mang đến cho quý khách hàng những giải pháp đầu tư an toàn và sinh lời bền vững nhất.",
-    experience: 10,
+    bio: "Với hơn 8 năm kinh nghiệm trong lĩnh vực bất động sản cao cấp, tôi cam kết mang đến cho quý khách hàng những giải pháp đầu tư an toàn và sinh lời bền vững nhất.",
+    experience: 8,
     projectCount: 50,
     clientCount: 200,
     totalValue: "5000+ Tỷ",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop",
-    phone: "0901 234 567",
-    email: "contact@nguyenvana.vn",
-    zalo: "0901234567",
-    facebook: "facebook.com/nguyenvana.bds",
-    address: "Quận 1, TP. Hồ Chí Minh"
+    image: "/avt.jpeg",
+    phone: "0776 236 863",
+    email: "contact@nguyenvando.vn",
+    zalo: "0776236863",
+    facebook: "facebook.com/nguyenvando.bds",
+    address: "48+50 Nguyễn Thị Minh Khai, P. Bắc Giang, Bắc Ninh"
   },
   testimonials: [
     {
