@@ -31,7 +31,7 @@ export default function Hero({ agent }: HeroProps) {
             <h2 className="text-[#0F4C81] font-semibold tracking-wider uppercase mb-4">
               {agent.title}
             </h2>
-            <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               {agent.name}
             </h1>
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto lg:mx-0 whitespace-pre-line">
@@ -66,7 +66,7 @@ export default function Hero({ agent }: HeroProps) {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="relative w-[300px] h-[400px] lg:w-[450px] lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl"
+            className="relative w-[220px] h-[300px] lg:w-[320px] lg:h-[440px] rounded-2xl overflow-hidden shadow-2xl"
           >
             <Image
               src={agent.image}

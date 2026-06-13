@@ -9,8 +9,22 @@ export default function FloatingContact() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
-  // Ẩn trên trang admin
+  // Auto-open 1 lần/session sau 2 giây
+  useEffect(() => {
+    if (pathname.startsWith('/admin')) return
+    if (pathname.startsWith('/du-an/')) return // trang chi tiết đã có sidebar form
+    const shown = sessionStorage.getItem('contact_modal_shown')
+    if (shown) return
+    const timer = setTimeout(() => {
+      setOpen(true)
+      sessionStorage.setItem('contact_modal_shown', '1')
+    }, 2000)
+    return () => clearTimeout(timer)
+  }, [pathname])
+
+  // Ẩn trên trang admin và trang chi tiết dự án
   if (pathname.startsWith('/admin')) return null
+  if (pathname.startsWith('/du-an/')) return null
 
   return (
     <>

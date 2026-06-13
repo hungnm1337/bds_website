@@ -37,7 +37,7 @@ export default function Header() {
           </div>
           <div className="flex flex-col leading-none">
             <span className={`font-bold text-base transition-colors ${scrolled ? 'text-gray-900' : 'text-gray-900'}`}>
-              {agent.name.split(' ').slice(-1)[0]}
+              Đại Đô CĐT
             </span>
             <span className="text-[10px] text-[#0F4C81] font-semibold uppercase tracking-widest">
               Bất Động Sản
