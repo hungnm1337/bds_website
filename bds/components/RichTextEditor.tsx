@@ -4,8 +4,8 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder'
-import { Extension } from '@tiptap/core'
-import { useState } from 'react'
+import ImageExtension from '@tiptap/extension-image'
+import { useState, useCallback } from 'react'
 
 interface RichTextEditorProps {
   name: string
@@ -16,15 +16,27 @@ interface RichTextEditorProps {
 
 type Level = 1 | 2 | 3
 
+// Upload ảnh lên Cloudinary qua API route
+async function uploadImageToCloudinary(file: File): Promise<string> {
+  const formData = new FormData()
+  formData.append('file', file)
+  const res = await fetch('/api/upload-image', { method: 'POST', body: formData })
+  if (!res.ok) throw new Error('Upload ảnh thất bại')
+  const data = await res.json()
+  return data.url as string
+}
+
 function ToolbarButton({
   onClick,
   active,
   title,
+  disabled,
   children,
 }: {
   onClick: () => void
   active?: boolean
   title: string
+  disabled?: boolean
   children: React.ReactNode
 }) {
   return (
@@ -32,7 +44,8 @@ function ToolbarButton({
       type="button"
       onClick={onClick}
       title={title}
-      className={`p-1.5 rounded-lg text-sm transition-all ${
+      disabled={disabled}
+      className={`p-1.5 rounded-lg text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
         active
           ? 'bg-blue-100 text-blue-700 font-semibold'
           : 'text-gray-500 hover:bg-gray-100 hover:text-gray-800'
@@ -50,14 +63,28 @@ export default function RichTextEditor({
   minHeight = '160px',
 }: RichTextEditorProps) {
   const [html, setHtml] = useState(defaultValue)
+  const [uploading, setUploading] = useState(false)
+
+  // Hàm upload dùng chung cho paste & toolbar
+  const uploadAndInsert = useCallback(async (file: File, editorInstance: ReturnType<typeof useEditor>) => {
+    if (!editorInstance) return
+    setUploading(true)
+    try {
+      const url = await uploadImageToCloudinary(file)
+      editorInstance.chain().focus().setImage({ src: url }).run()
+    } catch {
+      alert('Upload ảnh thất bại, vui lòng thử lại')
+    } finally {
+      setUploading(false)
+    }
+  }, [])
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        heading: { levels: [1, 2, 3] },
-      }),
+      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({ placeholder }),
+      ImageExtension.configure({ inline: false, allowBase64: false }),
     ],
     content: defaultValue,
     onUpdate({ editor }) {
@@ -67,9 +94,41 @@ export default function RichTextEditor({
       attributes: {
         class: 'outline-none prose prose-sm max-w-none px-4 py-3 min-h-[inherit]',
       },
+      // Xử lý paste ảnh
+      handlePaste(view, event) {
+        const items = Array.from(event.clipboardData?.items ?? [])
+        const imageItem = items.find((item) => item.type.startsWith('image/'))
+        if (!imageItem) return false
+        event.preventDefault()
+        const file = imageItem.getAsFile()
+        if (!file) return false
+        uploadAndInsert(file, editor)
+        return true
+      },
+      // Xử lý kéo thả ảnh vào editor
+      handleDrop(view, event) {
+        const files = Array.from(event.dataTransfer?.files ?? [])
+        const imageFile = files.find((f) => f.type.startsWith('image/'))
+        if (!imageFile) return false
+        event.preventDefault()
+        uploadAndInsert(imageFile, editor)
+        return true
+      },
     },
     immediatelyRender: false,
   })
+
+  // Toolbar: chọn ảnh từ file
+  function handleImagePick() {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    input.onchange = async () => {
+      const file = input.files?.[0]
+      if (file && editor) await uploadAndInsert(file, editor)
+    }
+    input.click()
+  }
 
   return (
     <div className="rounded-xl border border-gray-200 bg-gray-50 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 transition-all overflow-hidden">
@@ -203,7 +262,39 @@ export default function RichTextEditor({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M10 12h10M6 18h14" />
           </svg>
         </ToolbarButton>
+
+        <div className="w-px h-5 bg-gray-200 mx-1" />
+
+        {/* Insert Image */}
+        <ToolbarButton
+          title="Chèn ảnh"
+          disabled={uploading}
+          onClick={handleImagePick}
+        >
+          {uploading ? (
+            <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          )}
+        </ToolbarButton>
       </div>
+
+      {/* Uploading indicator */}
+      {uploading && (
+        <div className="px-4 py-1.5 bg-blue-50 text-blue-600 text-xs flex items-center gap-2 border-b border-blue-100">
+          <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24" fill="none">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          Đang upload ảnh lên Cloudinary...
+        </div>
+      )}
 
       {/* Editor content */}
       <div style={{ minHeight }}>

@@ -19,8 +19,8 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Project */}
-      <div className="relative h-[60vh] w-full">
+      {/* Hero Project — mt-20 để tránh header fixed đè lên */}
+      <div className="relative h-[60vh] w-full mt-20">
         <Image
           src={project.main_image_url}
           alt={project.name}
