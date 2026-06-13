@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { portfolioData } from '@/lib/constants'
 
@@ -26,22 +27,14 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md ${
-        scrolled ? 'shadow-md py-3' : 'py-5'
+        scrolled ? 'shadow-md py-1' : 'py-1'
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-[#0F4C81] flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-            <span className="text-white font-black text-lg leading-none">B</span>
-          </div>
-          <div className="flex flex-col leading-none">
-            <span className={`font-bold text-base transition-colors ${scrolled ? 'text-gray-900' : 'text-gray-900'}`}>
-              Đại Đô CĐT
-            </span>
-            <span className="text-[10px] text-[#0F4C81] font-semibold uppercase tracking-widest">
-              Bất Động Sản
-            </span>
+          <div className="relative w-24 h-24 -my-4 group-hover:scale-110 transition-transform">
+            <Image src="/logo.png" alt="Đại Đô CĐT Logo" fill className="object-contain scale-[1.5]" />
           </div>
         </Link>
 
@@ -74,7 +67,7 @@ export default function Header() {
             href="#contact"
             className="px-5 py-2.5 bg-[#0F4C81] text-white text-sm font-semibold rounded-xl shadow-lg hover:bg-[#0d416e] hover:shadow-xl transition-all hover:-translate-y-0.5"
           >
-            Tư vấn miễn phí
+            Nhận tư vấn
           </a>
         </div>
 

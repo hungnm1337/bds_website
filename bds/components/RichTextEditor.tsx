@@ -101,15 +101,14 @@ export default function RichTextEditor({
         if (!imageItem) return false
         event.preventDefault()
         const file = imageItem.getAsFile()
-        if (!file) return false
+        if (!file || !editor) return false
         uploadAndInsert(file, editor)
         return true
       },
-      // Xử lý kéo thả ảnh vào editor
       handleDrop(view, event) {
         const files = Array.from(event.dataTransfer?.files ?? [])
         const imageFile = files.find((f) => f.type.startsWith('image/'))
-        if (!imageFile) return false
+        if (!imageFile || !editor) return false
         event.preventDefault()
         uploadAndInsert(imageFile, editor)
         return true

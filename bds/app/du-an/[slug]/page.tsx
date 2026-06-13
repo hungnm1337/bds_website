@@ -2,7 +2,6 @@ import prisma from '@/lib/prisma'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import GallerySlider from '@/components/GallerySlider'
-import ContactForm from '@/components/ContactForm'
 
 export default async function ProjectDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -37,9 +36,8 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
       </div>
 
       <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-10">
+        <div className="max-w-4xl mx-auto space-y-10">
+
 
             {/* Tổng quan */}
             <section>
@@ -87,15 +85,6 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
               />
             </section>
 
-          </div>
-
-          {/* Sidebar Form */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-white border border-gray-100 shadow-2xl rounded-2xl p-8">
-              <h3 className="text-xl font-bold mb-6 text-center">Đăng ký tư vấn miễn phí</h3>
-              <ContactForm />
-            </div>
-          </div>
         </div>
       </div>
     </main>
