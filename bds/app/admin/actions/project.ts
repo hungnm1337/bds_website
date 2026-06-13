@@ -22,6 +22,8 @@ export async function createProject(formData: FormData) {
   const mainImageFile = formData.get('main_image') as File
   const galleryFiles = formData.getAll('gallery_images') as File[]
 
+  const MAX_SIZE = 5 * 1024 * 1024 // 5MB safety net
+
   let mainImageUrl = ''
   if (mainImageFile && mainImageFile.size > 0) {
     mainImageUrl = await uploadToCloudinary(mainImageFile, 'bds/projects')
@@ -57,6 +59,8 @@ export async function updateProject(id: number, formData: FormData) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateData: any = { name, address, price, description, detail }
+
+  const MAX_SIZE = 5 * 1024 * 1024 // 5MB safety net
 
   if (mainImageFile && mainImageFile.size > 0) {
     updateData.main_image_url = await uploadToCloudinary(mainImageFile, 'bds/projects')

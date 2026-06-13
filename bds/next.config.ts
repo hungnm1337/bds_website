@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '30mb',
+    },
+  },
+  middlewareClientMaxBodySize: 30 * 1024 * 1024, // 30MB — match serverActions limit
   images: {
     remotePatterns: [
       {

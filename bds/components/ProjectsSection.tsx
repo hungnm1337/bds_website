@@ -33,7 +33,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
+          {projects.slice(0, 3).map((project, index) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 30 }}
@@ -71,6 +71,24 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
             </motion.div>
           ))}
         </div>
+
+        {/* Nút xem thêm */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
+          <Link
+            href="/du-an"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-[#0F4C81] text-white font-semibold rounded-2xl shadow-lg hover:bg-[#0d416e] hover:shadow-xl hover:-translate-y-0.5 transition-all"
+          >
+            Xem tất cả dự án
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </motion.div>
       </div>
     </section>
   )

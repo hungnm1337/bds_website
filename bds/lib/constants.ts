@@ -6,7 +6,7 @@ export const portfolioData = {
     experience: 8,
     projectCount: 50,
     clientCount: 200,
-    totalValue: "5000+ Tỷ",
+    totalValue: "50+ Tỷ",
     image: "/avt.jpeg",
     phone: "0776 236 863",
     email: "contact@nguyenvando.vn",
