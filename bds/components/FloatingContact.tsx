@@ -9,8 +9,7 @@ export default function FloatingContact() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
-  const isProjectDetail = /^\/du-an\/.+/.test(pathname)
-  const isHidden = pathname.startsWith('/admin') || isProjectDetail
+  const isHidden = pathname.startsWith('/admin')
 
   // Auto-open 1 lần/session sau 2 giây
   useEffect(() => {
