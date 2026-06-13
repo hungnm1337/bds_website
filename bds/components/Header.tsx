@@ -33,8 +33,8 @@ export default function Header() {
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-24 h-24 -my-4 group-hover:scale-110 transition-transform">
-            <Image src="/logo.png" alt="Đại Đô CĐT Logo" fill className="object-contain scale-[1.5]" />
+          <div className="relative w-24 h-24 -my-4 group-hover:scale-100 transition-transform">
+            <Image src="/logo1.png" alt="Đại Đô CĐT Logo" fill className="object-contain scale-[0.9]" />
           </div>
         </Link>
 

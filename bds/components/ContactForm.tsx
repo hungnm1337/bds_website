@@ -127,7 +127,7 @@ export default function ContactForm() {
             id="message"
             name="message"
             rows={3}
-            placeholder="Tôi muốn tìm hiểu về các dự án căn hộ cao cấp tại TP. HCM..."
+            placeholder="Tôi muốn tìm hiểu về các dự án căn hộ cao cấp tại Bắc Ninh..."
             className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F4C81] transition-all resize-none placeholder:text-gray-400"
           />
         </div>
