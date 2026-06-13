@@ -14,6 +14,7 @@ type ProjectData = {
   description: string
   detail: string
   main_image_url: string
+  slug: string
   project_image: GalleryImage[]
 }
 
@@ -180,6 +181,12 @@ export default function ProjectForm({ project }: ProjectFormProps) {
         <div>
           <label className={labelClass}>Tên dự án <span className="text-red-500">*</span></label>
           <input name="name" type="text" required defaultValue={project?.name} placeholder="VD: Khu đô thị Vinhomes Bắc Ninh" className={inputClass} />
+        </div>
+
+        {/* Slug */}
+        <div>
+          <label className={labelClass}>Đường dẫn (Slug) <span className="text-gray-400 font-normal text-xs ml-1">(để trống sẽ tự tạo từ tên dự án)</span></label>
+          <input name="slug" type="text" defaultValue={project?.slug} placeholder="VD: vinhomes-bac-ninh" className={inputClass} />
         </div>
 
         {/* Address + Price */}

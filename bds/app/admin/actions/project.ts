@@ -6,6 +6,33 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { uploadToCloudinary, deleteFromCloudinary } from '@/lib/cloudinary'
 
+function generateSlug(text: string) {
+  return text.toString().toLowerCase()
+    .normalize('NFD') // Tách dấu
+    .replace(/[\u0300-\u036f]/g, '') // Xoá dấu
+    .replace(/đ/g, 'd')
+    .replace(/[^a-z0-9-]/g, '-') // Xoá toàn bộ ký tự không phải chữ/số/gạch ngang và thay bằng gạch ngang
+    .replace(/-+/g, '-') // Gom nhiều gạch ngang thành 1
+    .replace(/^-|-$/g, '') // Cắt gạch ngang ở đầu và cuối
+}
+
+async function generateUniqueSlug(baseName: string, explicitSlug?: string, excludeId?: number) {
+  let slug = explicitSlug ? generateSlug(explicitSlug) : generateSlug(baseName)
+  if (!slug) slug = 'du-an'
+
+  let counter = 1
+  let uniqueSlug = slug
+  while (true) {
+    const existing = await prisma.project.findFirst({
+      where: { slug: uniqueSlug, ...(excludeId ? { NOT: { id: excludeId } } : {}) }
+    })
+    if (!existing) break
+    uniqueSlug = `${slug}-${counter}`
+    counter++
+  }
+  return uniqueSlug
+}
+
 async function requireAuth() {
   const session = await verifySession()
   if (!session) redirect('/admin/login')
@@ -19,6 +46,7 @@ export async function createProject(formData: FormData) {
   const price = formData.get('price') as string
   const description = formData.get('description') as string
   const detail = formData.get('detail') as string
+  const formSlug = formData.get('slug') as string
   const mainImageFile = formData.get('main_image') as File
   const galleryFiles = formData.getAll('gallery_images') as File[]
 
@@ -29,8 +57,10 @@ export async function createProject(formData: FormData) {
     mainImageUrl = await uploadToCloudinary(mainImageFile, 'bds/projects')
   }
 
+  const slug = await generateUniqueSlug(name, formSlug)
+
   const project = await prisma.project.create({
-    data: { name, address, price, description, detail, main_image_url: mainImageUrl },
+    data: { name, slug, address, price, description, detail, main_image_url: mainImageUrl },
   })
 
   for (const file of galleryFiles) {
@@ -54,11 +84,14 @@ export async function updateProject(id: number, formData: FormData) {
   const price = formData.get('price') as string
   const description = formData.get('description') as string
   const detail = formData.get('detail') as string
+  const formSlug = formData.get('slug') as string
   const mainImageFile = formData.get('main_image') as File
   const galleryFiles = formData.getAll('gallery_images') as File[]
 
+  const slug = await generateUniqueSlug(name, formSlug, id)
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateData: any = { name, address, price, description, detail }
+  const updateData: any = { name, slug, address, price, description, detail }
 
   const MAX_SIZE = 5 * 1024 * 1024 // 5MB safety net
 

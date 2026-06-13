@@ -5,12 +5,8 @@ import GallerySlider from '@/components/GallerySlider'
 
 export default async function ProjectDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const projectId = parseInt(slug)
-
-  if (isNaN(projectId)) notFound()
-
   const project = await prisma.project.findUnique({
-    where: { id: projectId },
+    where: { slug: slug },
     include: { project_image: true }
   })
 

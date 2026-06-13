@@ -10,6 +10,7 @@ interface Project {
   address: string
   price: string
   main_image_url: string
+  slug: string
 }
 
 interface ProjectsSectionProps {
@@ -58,7 +59,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                 </h3>
                 <div className="flex items-center justify-between">
                   <span className="text-lg font-bold text-[#0F4C81]">{project.price}</span>
-                  <Link href={`/du-an/${project.id}`}>
+                  <Link href={`/du-an/${project.slug}`}>
                     <motion.span
                       whileHover={{ x: 5 }}
                       className="text-gray-900 font-semibold flex items-center gap-1 cursor-pointer"

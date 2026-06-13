@@ -25,6 +25,7 @@ model project {
   detail         String
   main_image_url String
   created_at     DateTime?       @default(now()) @db.Timestamp(6)
+  slug           String          @unique @db.VarChar(255)
   project_image  project_image[]
 }
 
