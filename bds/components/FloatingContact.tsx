@@ -78,11 +78,11 @@ export default function FloatingContact() {
             {/* Modal card */}
             <motion.div
               key="modal"
-              initial={{ opacity: 0, y: 60, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 60, scale: 0.95 }}
+              initial={{ opacity: 0, y: 60, scale: 0.85 }}
+              animate={{ opacity: 1, y: 0, scale: 0.9 }}
+              exit={{ opacity: 0, y: 60, scale: 0.85 }}
               transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-              className="fixed bottom-24 right-6 z-50 w-[340px] max-w-[calc(100vw-24px)] bg-white rounded-3xl shadow-2xl overflow-hidden"
+              className="fixed bottom-24 right-6 z-50 w-[340px] max-w-[calc(100vw-24px)] bg-white rounded-3xl shadow-2xl overflow-hidden origin-bottom-right"
             >
               {/* Header modal */}
               <div className="px-6 py-5 text-white relative overflow-hidden"

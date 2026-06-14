@@ -1,7 +1,7 @@
 export const portfolioData = {
   agent: {
     name: "NGUYỄN VĂN ĐÔ",
-    title: "Chuyên Viên Tư Vấn Bất Động Sản Cao Cấp",
+    title: "Chuyên gia tư vấn đầu tư cao cấp",
     bio: "Với hơn 8 năm kinh nghiệm trong lĩnh vực bất động sản cao cấp, tôi cam kết mang đến cho quý khách hàng những giải pháp đầu tư an toàn và sinh lời bền vững nhất.",
     experience: 8,
     projectCount: 50,

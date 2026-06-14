@@ -95,7 +95,8 @@ export default async function Home() {
       <footer className="bg-gray-900 text-gray-400 py-8">
         <div className="container mx-auto px-6 text-center">
           <p className="text-sm">
-            © {new Date().getFullYear()} {agent.name} — Chuyên viên tư vấn bất động sản cao cấp
+            © {new Date().getFullYear()} {agent.name} — Chuyên gia tư vấn đầu tư cao cấp
+
           </p>
           <p className="text-xs mt-1 opacity-60">{agent.address}</p>
         </div>
