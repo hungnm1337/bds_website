@@ -44,7 +44,7 @@ export default async function ProjectsPage() {
               {projects.map((project) => (
                 <Link
                   key={project.id}
-                  href={`/du-an/${project.slug}`}
+                  href={`/${project.slug}`}
                   className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="relative h-60 overflow-hidden">

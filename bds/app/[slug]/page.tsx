@@ -2,6 +2,47 @@ import prisma from '@/lib/prisma'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import GallerySlider from '@/components/GallerySlider'
+import { Metadata } from 'next'
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const project = await prisma.project.findUnique({
+    where: { slug }
+  })
+
+  if (!project) {
+    return {
+      title: 'Không tìm thấy dự án'
+    }
+  }
+
+  const title = `${project.name} - Giá chủ đầu tư | Đại Đô CĐT`
+  const description = `Thông tin chi tiết dự án ${project.name} tại ${project.address}. Giá từ ${project.price}. Xem ngay bảng giá chủ đầu tư và chính sách ưu đãi mới nhất.`
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: project.main_image_url,
+          width: 1200,
+          height: 630,
+          alt: project.name,
+        },
+      ],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [project.main_image_url],
+    }
+  }
+}
 
 export default async function ProjectDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -33,7 +74,6 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
 
       <div className="container mx-auto px-6 py-16">
         <div className="max-w-4xl mx-auto space-y-10">
-
 
             {/* Tổng quan */}
             <section>
@@ -86,4 +126,3 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
     </main>
   )
 }
-
