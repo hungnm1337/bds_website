@@ -65,7 +65,12 @@ function Toast({ state, onClose }: { state: NonNullable<ContactFormState>; onClo
   )
 }
 
-export default function ContactForm() {
+interface ContactFormProps {
+  variant?: 'default' | 'price'
+}
+
+export default function ContactForm({ variant = 'default' }: ContactFormProps) {
+  const isPriceVariant = variant === 'price'
   const [state, formAction, isPending] = useActionState(submitContactForm, initialState)
   const [showToast, setShowToast] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
@@ -119,18 +124,22 @@ export default function ContactForm() {
           />
         </div>
 
-        <div>
-          <label htmlFor="message" className="block text-gray-700 text-sm font-semibold mb-2">
-            Nhu cầu / Tin nhắn
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows={3}
-            placeholder="Tôi muốn tìm hiểu về các dự án căn hộ cao cấp tại Bắc Ninh..."
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F4C81] transition-all resize-none placeholder:text-gray-400"
-          />
-        </div>
+        {isPriceVariant ? (
+          <input type="hidden" name="message" value="Yêu cầu bảng giá" />
+        ) : (
+          <div>
+            <label htmlFor="message" className="block text-gray-700 text-sm font-semibold mb-2">
+              Nhu cầu / Tin nhắn
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows={3}
+              placeholder="Tôi muốn tìm hiểu về các dự án căn hộ cao cấp tại Bắc Ninh..."
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F4C81] transition-all resize-none placeholder:text-gray-400"
+            />
+          </div>
+        )}
 
         <button
           type="submit"
@@ -147,7 +156,7 @@ export default function ContactForm() {
               Đang gửi...
             </span>
           ) : (
-            'GỬI YÊU CẦU NGAY'
+            isPriceVariant ? 'TẢI NGAY' : 'GỬI YÊU CẦU NGAY'
           )}
         </button>
 

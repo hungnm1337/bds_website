@@ -10,6 +10,8 @@ export default function FloatingContact() {
   const [open, setOpen] = useState(false)
 
   const isHidden = pathname.startsWith('/admin')
+  // Trang dự án: không phải trang chủ, /du-an, /admin, /api
+  const isProjectPage = !['/', '/du-an'].includes(pathname) && !pathname.startsWith('/admin') && !pathname.startsWith('/api')
 
   // Auto-open 1 lần/session sau 2 giây
   useEffect(() => {
@@ -58,7 +60,7 @@ export default function FloatingContact() {
               d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
           </svg>
         </motion.span>
-        <span>Tư vấn miễn phí</span>
+        <span>{isProjectPage ? 'Tải bảng giá' : 'Tư vấn miễn phí'}</span>
       </motion.button>
 
       {/* ── Modal ── */}
@@ -109,15 +111,17 @@ export default function FloatingContact() {
                     </svg>
                   </div>
                   <div>
-                    <p className="font-bold text-base leading-tight">Đăng ký tư vấn miễn phí</p>
-                    <p className="text-blue-200 text-xs mt-0.5">Phản hồi trong vòng 15 phút</p>
+                    <p className="font-bold text-base leading-tight">
+                    {isProjectPage ? 'Tải bảng giá chủ đầu tư' : 'Đăng ký tư vấn miễn phí'}
+                  </p>
+                  <p className="text-blue-200 text-xs mt-0.5">Phản hồi trong vòng 15 phút</p>
                   </div>
                 </div>
               </div>
 
               {/* Form */}
               <div className="px-6 py-5">
-                <ContactForm />
+                <ContactForm variant={isProjectPage ? 'price' : 'default'} />
               </div>
             </motion.div>
           </>
