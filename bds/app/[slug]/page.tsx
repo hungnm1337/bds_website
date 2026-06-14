@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import GallerySlider from '@/components/GallerySlider'
 import { Metadata } from 'next'
 
+const BASE_URL = 'https://www.daidocdt.com'
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const project = await prisma.project.findUnique({
@@ -18,13 +20,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   const title = `${project.name} - Giá chủ đầu tư | Đại Đô CĐT`
   const description = `Thông tin chi tiết dự án ${project.name} tại ${project.address}. Giá từ ${project.price}. Xem ngay bảng giá chủ đầu tư và chính sách ưu đãi mới nhất.`
+  const canonicalUrl = `${BASE_URL}/${slug}`
 
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,
+      url: canonicalUrl,
       images: [
         {
           url: project.main_image_url,
@@ -53,14 +60,67 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
 
   if (!project) notFound()
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Trang chủ',
+        item: BASE_URL,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Dự án',
+        item: `${BASE_URL}/du-an`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: project.name,
+        item: `${BASE_URL}/${slug}`,
+      },
+    ],
+  }
+
+  const realEstateSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Apartment',
+    name: project.name,
+    description: project.description.replace(/<[^>]+>/g, '').slice(0, 300),
+    url: `${BASE_URL}/${slug}`,
+    image: project.main_image_url,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: project.address,
+      addressCountry: 'VN',
+    },
+    offers: {
+      '@type': 'Offer',
+      price: project.price,
+      priceCurrency: 'VND',
+    },
+  }
+
   return (
     <main className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(realEstateSchema) }}
+      />
       {/* Hero Project — mt-20 để tránh header fixed đè lên */}
       <div className="relative h-[60vh] w-full mt-20">
         <Image
           src={project.main_image_url}
           alt={project.name}
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />
