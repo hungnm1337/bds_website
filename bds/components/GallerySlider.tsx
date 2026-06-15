@@ -32,6 +32,48 @@ export default function GallerySlider({ images, projectName }: GallerySliderProp
 
   const visibleImages = images.slice(startIndex, startIndex + PER_PAGE)
 
+  // ── Trường hợp chỉ có 1 ảnh: hiển thị to, căn giữa ──
+  if (total === 1) {
+    return (
+      <>
+        <div className="flex justify-center">
+          <button
+            onClick={() => openLightbox(0)}
+            className="relative w-full max-w-2xl h-80 rounded-2xl overflow-hidden group focus:outline-none focus:ring-2 focus:ring-[#0F4C81] shadow-md"
+            aria-label="Xem ảnh 1"
+          >
+            <Image
+              src={images[0].image_url}
+              alt={`${projectName} - ảnh 1`}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 672px"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow">
+                <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0zm-6-3v6m-3-3h6" />
+                </svg>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        {/* Lightbox */}
+        {lightbox !== null && (
+          <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={closeLightbox}>
+            <button onClick={closeLightbox} className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10" aria-label="Đóng">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <div className="relative w-full max-w-4xl max-h-[85vh] mx-12" onClick={(e) => e.stopPropagation()}>
+              <Image src={images[0].image_url} alt={`${projectName} - ảnh 1`} width={1200} height={800} className="w-full h-auto max-h-[85vh] object-contain rounded-xl shadow-2xl" priority />
+            </div>
+          </div>
+        )}
+      </>
+    )
+  }
+
   return (
     <>
       {/* ── Slider ── */}
@@ -50,7 +92,7 @@ export default function GallerySlider({ images, projectName }: GallerySliderProp
         </button>
 
         {/* Images */}
-        <div className="grid grid-cols-3 gap-3 overflow-hidden">
+        <div className={`grid gap-3 overflow-hidden ${total === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
           {visibleImages.map((img, i) => (
             <button
               key={img.id}
@@ -63,7 +105,7 @@ export default function GallerySlider({ images, projectName }: GallerySliderProp
                 alt={`${projectName} - ảnh ${startIndex + i + 1}`}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 768px) 33vw, 280px"
+                sizes="(max-width: 768px) 50vw, 280px"
               />
               {/* Zoom icon overlay */}
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
@@ -75,12 +117,6 @@ export default function GallerySlider({ images, projectName }: GallerySliderProp
               </div>
             </button>
           ))}
-
-          {/* Placeholder nếu < 3 ảnh visible */}
-          {visibleImages.length < PER_PAGE &&
-            Array.from({ length: PER_PAGE - visibleImages.length }).map((_, i) => (
-              <div key={`ph-${i}`} className="h-52 rounded-xl bg-gray-100" />
-            ))}
         </div>
 
         {/* Arrow Next */}
