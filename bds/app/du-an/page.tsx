@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { portfolioData } from '@/lib/constants'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Tất cả dự án bất động sản | ' + portfolioData.agent.name,
   description: 'Khám phá toàn bộ danh sách dự án bất động sản nổi bật do ' + portfolioData.agent.name + ' tư vấn.',

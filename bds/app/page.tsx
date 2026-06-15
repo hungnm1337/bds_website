@@ -4,6 +4,8 @@ import ProjectsSection from '@/components/ProjectsSection'
 import ContactForm from '@/components/ContactForm'
 import { portfolioData } from '@/lib/constants'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   const agent = portfolioData.agent
 
