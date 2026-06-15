@@ -34,7 +34,7 @@ export default function FloatingContact() {
   return (
     <>
       {/* ── Nhóm nút nổi góc phải ── */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-3">
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
 
         {/* Nút Zalo */}
         <motion.a
@@ -43,19 +43,16 @@ export default function FloatingContact() {
           rel="noopener noreferrer"
           aria-label="Chat Zalo"
           title="Chat Zalo"
-          className="w-12 h-12 rounded-full flex items-center justify-center shadow-xl text-white text-xs font-bold"
-          style={{ background: 'linear-gradient(135deg, #0068FF, #00AAFF)' }}
+          className="w-12 h-12 rounded-full flex items-center justify-center shadow-xl overflow-hidden"
           initial={{ opacity: 0, scale: 0, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ delay: 0.1, type: 'spring', stiffness: 400, damping: 20 }}
           whileHover={{ scale: 1.15 }}
           whileTap={{ scale: 0.92 }}
         >
-          {/* Zalo SVG icon */}
-          <svg viewBox="0 0 64 64" className="w-7 h-7" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M32 6C17.6 6 6 17.6 6 32c0 4.8 1.3 9.4 3.7 13.3L6 58l13.1-3.5C22.8 56.7 27.3 58 32 58c14.4 0 26-11.6 26-26S46.4 6 32 6z" fill="white" fillOpacity="0.2"/>
-            <text x="50%" y="54%" dominantBaseline="middle" textAnchor="middle" fontSize="22" fontWeight="bold" fill="white" fontFamily="Arial, sans-serif">Z</text>
-          </svg>
+          {/* Zalo logo */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="https://banghieuviet.org/wp-content/uploads/2023/08/logo-zalo-tron.jpg" alt="Zalo" className="w-10 h-10 rounded-full object-cover" />
         </motion.a>
 
         {/* Nút Điện thoại */}
