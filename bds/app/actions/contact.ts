@@ -1,6 +1,7 @@
 'use server'
 
 import prisma from '@/lib/prisma'
+import { sendNewFormNotification } from '@/lib/mailer'
 
 export type ContactFormState = {
   success: boolean
@@ -37,6 +38,13 @@ export async function submitContactForm(
         message: message?.trim() || null,
       },
     })
+
+    // Gửi email thông báo – fire-and-forget (không block response)
+    sendNewFormNotification({
+      fullName: fullName.trim(),
+      phoneNumber: phoneNumber.trim(),
+      message: message?.trim() || null,
+    }).catch((err) => console.error('[mailer] Lỗi gửi email:', err))
 
     return {
       success: true,
