@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useParams } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
 import ContactForm from '@/components/ContactForm'
 import { portfolioData } from '@/lib/constants'
@@ -11,11 +11,27 @@ const ZALO = portfolioData.agent.zalo
 
 export default function FloatingContact() {
   const pathname = usePathname()
+  const params = useParams()
+  const slug = typeof params?.slug === 'string' ? params.slug : null
+
   const [open, setOpen] = useState(false)
   const [phoneModal, setPhoneModal] = useState(false)
+  const [projectName, setProjectName] = useState<string | null>(null)
 
   const isHidden = pathname.startsWith('/admin')
   const isProjectPage = !['/', '/du-an'].includes(pathname) && !pathname.startsWith('/admin') && !pathname.startsWith('/api')
+
+  // Fetch tên dự án khi đang ở trang dự án cụ thể
+  useEffect(() => {
+    if (!slug || !isProjectPage) {
+      setProjectName(null)
+      return
+    }
+    fetch(`/api/project-name/${slug}`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => setProjectName(data?.name ?? null))
+      .catch(() => setProjectName(null))
+  }, [slug, isProjectPage])
 
   // Auto-open 1 lần/session sau 2 giây
   useEffect(() => {
@@ -243,7 +259,10 @@ export default function FloatingContact() {
 
               {/* Form */}
               <div className="px-6 py-5">
-                <ContactForm variant={isProjectPage ? 'price' : 'default'} />
+                <ContactForm
+                  variant={isProjectPage ? 'price' : 'default'}
+                  projectName={projectName ?? undefined}
+                />
               </div>
             </motion.div>
           </>

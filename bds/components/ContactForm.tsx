@@ -67,10 +67,15 @@ function Toast({ state, onClose }: { state: NonNullable<ContactFormState>; onClo
 
 interface ContactFormProps {
   variant?: 'default' | 'price'
+  /** Tên dự án, dùng để tạo message mặc định khi variant = 'price' */
+  projectName?: string
 }
 
-export default function ContactForm({ variant = 'default' }: ContactFormProps) {
+export default function ContactForm({ variant = 'default', projectName }: ContactFormProps) {
   const isPriceVariant = variant === 'price'
+  const defaultMessage = isPriceVariant && projectName
+    ? `Tôi muốn nhận bảng giá mới nhất của dự án ${projectName}.`
+    : 'Tôi muốn nhận bảng giá mới nhất.'
   const [state, formAction, isPending] = useActionState(submitContactForm, initialState)
   const [showToast, setShowToast] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
@@ -125,7 +130,7 @@ export default function ContactForm({ variant = 'default' }: ContactFormProps) {
         </div>
 
         {isPriceVariant ? (
-          <input type="hidden" name="message" value="Yêu cầu bảng giá" />
+          <input type="hidden" name="message" value={defaultMessage} />
         ) : (
           <div>
             <label htmlFor="message" className="block text-gray-700 text-sm font-semibold mb-2">
